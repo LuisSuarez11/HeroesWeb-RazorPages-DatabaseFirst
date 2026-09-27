@@ -1,0 +1,45 @@
+@page
+@model HeroesWeb.Pages_SuperPoderes.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SuperPoderes</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SuperPoderes.Id" />
+            <div class="form-group">
+                <label asp-for="SuperPoderes.Nombre" class="control-label"></label>
+                <input asp-for="SuperPoderes.Nombre" class="form-control" />
+                <span asp-validation-for="SuperPoderes.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuperPoderes.Descripcion" class="control-label"></label>
+                <input asp-for="SuperPoderes.Descripcion" class="form-control" />
+                <span asp-validation-for="SuperPoderes.Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuperPoderes.HeroeId" class="control-label"></label>
+                <select asp-for="SuperPoderes.HeroeId" class="form-control" asp-items="ViewBag.HeroeId" ></select>
+                <span asp-validation-for="SuperPoderes.HeroeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
