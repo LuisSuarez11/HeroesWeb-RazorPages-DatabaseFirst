@@ -1,0 +1,36 @@
+Práctica guiada: Tag Helpers en ASP.NET Core
+Web III - Razor Pages - Proyecto HeroesWeb
+
+Repositorio: https://github.com/LuisSuarez11/HeroesWeb-RazorPages-DatabaseFirst
+
+Respuestas
+
+1. ¿Dónde se ejecuta un Tag Helper y qué recibe el navegador?
+Un Tag Helper se ejecuta en el servidor, en el momento en que Razor procesa la vista antes de enviar la respuesta. El navegador nunca ve el atributo asp-for ni ningún otro atributo asp-...; recibe únicamente el HTML final ya generado (input, select, span con mensajes de error, etc.), como cualquier otra página HTML normal.
+
+2. ¿Qué diferencia hay entre asp-for y [BindProperty]?
+asp-for actúa del lado de la vista: genera el HTML de salida (id, name, value) a partir de una propiedad del modelo y también sirve para mostrar los mensajes de validación asociados a esa propiedad. [BindProperty] actúa del lado del PageModel: le indica al framework que, al recibir un POST, debe tomar los valores enviados por el formulario y asignarlos automáticamente a esa propiedad. Uno genera el formulario, el otro recibe los datos que vuelven.
+
+3. ¿Por qué se escribe Inscripcion.Nombre en asp-for?
+Porque el formulario no trabaja directamente sobre una propiedad simple del PageModel, sino sobre una propiedad compleja llamada Inscripcion, que es del tipo InscripcionMisionInput y contiene, a su vez, la propiedad Nombre. Al escribir "Inscripcion.Nombre" se le indica al Tag Helper la ruta completa dentro del modelo, y por eso el HTML generado usa name="Inscripcion.Nombre", que es justamente lo que el model binding necesita para reconstruir el objeto al recibir el POST.
+
+4. ¿Qué diferencia hay entre asp-for y asp-items en un selector?
+asp-for indica cuál propiedad del modelo va a recibir el valor seleccionado (por ejemplo Inscripcion.Ciudad), es decir, a dónde va el dato. asp-items, en cambio, indica de dónde salen las opciones que se muestran dentro del <select>: recibe una lista de SelectListItem (como Model.Ciudades o Model.Misiones) y con eso arma cada <option> del combo.
+
+5. ¿Por qué el selector muestra un texto pero envía un identificador?
+Porque cada SelectListItem tiene dos partes: Text, que es lo que ve el usuario en pantalla (por ejemplo "Rescate de civiles"), y Value, que es el dato que realmente se envía al servidor dentro del formulario (por ejemplo "1"). Esto permite mostrarle al usuario una descripción legible mientras el servidor trabaja con un identificador simple, más fácil de validar y de relacionar con la misión correspondiente.
+
+6. ¿Qué método atiende asp-page-handler="Inscribir" en este formulario y por qué?
+Lo atiende el método OnPostInscribir(). Razor Pages arma el nombre del handler combinando el verbo HTTP con el sufijo del atributo: como el formulario tiene method="post" y asp-page-handler="Inscribir", el framework busca un método que empiece con "OnPost" seguido de "Inscribir", es decir OnPostInscribir. Si el formulario fuera GET, buscaría en cambio un método OnGetInscribir.
+
+7. ¿Por qué se ejecuta CargarOpciones() tanto en GET como en POST?
+Porque HTTP no tiene memoria entre solicitudes: cada request es independiente y el servidor no conserva el estado del PageModel de la petición anterior. Las listas Ciudades y Misiones solo existen en memoria durante la ejecución del método, así que si no se vuelven a construir en OnPostInscribir(), al haber un error de validación y volver a mostrar la página, los combos aparecerían vacíos.
+
+8. ¿Por qué debe comprobarse ModelState.IsValid aunque exista validación en el navegador?
+Porque la validación del navegador (HTML5 o jQuery Validate) se puede desactivar, evitar o directamente no ejecutarse, por ejemplo si el usuario apaga JavaScript o modifica el HTML con las herramientas de desarrollador. La validación del servidor es la única que realmente garantiza la integridad de los datos, ya que se ejecuta siempre, sin depender del cliente. Por eso ModelState.IsValid es la comprobación que decide si la inscripción se acepta o no.
+
+9. ¿Qué hace asp-route-misionId y cómo llega su valor al PageModel?
+asp-route-misionId agrega un valor de ruta o parámetro de consulta al enlace generado; en este caso arma una URL como /Laboratorio/Inscripcion?misionId=1. Ese valor llega al PageModel porque el método OnGet(int? misionId) tiene un parámetro con el mismo nombre, y el model binding de Razor Pages lo toma automáticamente de la query string y lo asigna al parámetro cuando se ejecuta el GET.
+
+10. ¿Qué habría que agregar para guardar realmente una inscripción?
+Habría que crear una entidad de base de datos (por ejemplo Inscripcion) con sus propiedades y su relación con Mision, agregarla como DbSet en el DbContext y generar la migración correspondiente con Entity Framework Core. Luego, en OnPostInscribir(), en lugar de solo armar el mensaje de confirmación, habría que mapear los datos de InscripcionMisionInput a esa entidad, guardarla con el DbContext (Add + SaveChangesAsync) y, siguiendo el patrón Post-Redirect-Get, redirigir a un GET (por ejemplo RedirectToPage) en vez de devolver Page(), para evitar que un refresco del navegador vuelva a enviar el mismo formulario.
