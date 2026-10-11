@@ -1,0 +1,57 @@
+﻿Changed database context to 'HeroesClase1'.
+=== D1: nombre de ciudad repetido (UQ_Ciudades_Nombre) ===
+
+(0 rows affected)
+Resultado
+---------
+Violation of UNIQUE KEY constraint 'UQ_Ciudades_Nombre'. Cannot insert duplicate key in object 'dbo.Ciudades'. The duplicate key value is (La Paz).
+
+(1 rows affected)
+=== D2: nivel de amenaza fuera de rango (CK_Villanos_NivelAmenaza) ===
+
+(0 rows affected)
+Resultado
+---------
+The UPDATE statement conflicted with the CHECK constraint "CK_Villanos_NivelAmenaza". The conflict occurred in database "HeroesClase1", table "dbo.Villanos", column 'Nivel_Amenaza'.
+
+(1 rows affected)
+=== D3: borrar ciudad con villanos (FK_Villanos_Ciudades) ===
+
+(0 rows affected)
+Resultado
+---------
+The DELETE statement conflicted with the REFERENCE constraint "FK_Villanos_Ciudades". The conflict occurred in database "HeroesClase1", table "dbo.Villanos", column 'CiudadId'.
+
+(1 rows affected)
+=== E4: placa repetida 2345-ABC (UQ_Vehiculos_Placa) ===
+
+(0 rows affected)
+Resultado
+---------
+Violation of UNIQUE KEY constraint 'UQ_Vehiculos_Placa'. Cannot insert duplicate key in object 'dbo.Vehiculos'. The duplicate key value is (2345-ABC).
+
+(1 rows affected)
+=== E5: capacidad 0 (CK_Cuarteles_Capacidad) ===
+
+(0 rows affected)
+Resultado
+---------
+The UPDATE statement conflicted with the CHECK constraint "CK_Cuarteles_Capacidad". The conflict occurred in database "HeroesClase1", table "dbo.Cuarteles", column 'Capacidad'.
+
+(1 rows affected)
+=== E6: borrar Base Illimani (SET NULL), luego ROLLBACK ===
+
+(1 rows affected)
+Nro_Placa Modelo CuartelId
+--------- ------ ---------
+2345-ABC Halcón X1 NULL
+9876-XYZ Rayo T2 NULL
+1111-DEF Tortuga M3 NULL
+
+(3 rows affected)
+=== Verificacion: los datos siguen intactos ===
+Ciudades Villanos Cuarteles VehiculosConCuartel
+-------- -------- --------- -------------------
+2 2 2 2
+
+(1 rows affected)
