@@ -1,11 +1,11 @@
--- Base HeroesClase1: tablas de la clase 2 (reconstruidas), Clase 02 (Ciudades/Villanos) y ejercicio (Cuarteles/Vehiculos).
+-- Base HeroesClase1: tablas de la clase 2, Clase 02 (Ciudades/Villanos) y ejercicio (Cuarteles/Vehiculos).
 -- Se ejecuta una sola vez. No se usan migraciones.
 IF DB_ID(N'HeroesClase1') IS NULL CREATE DATABASE HeroesClase1;
 GO
 USE HeroesClase1;
 GO
 
-/* ===== Clase 2 (reconstruida): Equipo, Heroe, Ficha, Superpoder, HeroeSuperpoder ===== */
+/* ===== Clase 2: Equipo, Heroe, Ficha, Superpoder, HeroeSuperpoder ===== */
 CREATE TABLE dbo.Equipos (
     Id     INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,

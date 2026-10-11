@@ -14,7 +14,7 @@ Proyecto: `HeroesMvc` (ASP.NET Core MVC, .NET 10) · Contexto: `HeroesDbContext`
 | Pruebas SQL (con ROLLBACK) | `Sql/02_pruebas_restricciones.sql` → salida en `Docs/resultado_pruebas_D.txt` |
 | Capturas | `Docs/capturas/` |
 
-> Nota: las clases 1 y 2 no estaban disponibles, así que el mapeo de la clase 2 (Equipo, Heroe, Ficha, Superpoder, HeroeSuperpoder) se reconstruyó con una forma razonable (Equipo 1:N Heroe con FK opcional, Heroe 1:1 Ficha, Heroe N:M Superpoder) y se conserva en bloques `modelBuilder.Entity<...>` dentro del contexto, tal como pide la guía.
+El mapeo de la clase 2 (Equipo, Heroe, Ficha, Superpoder, HeroeSuperpoder) se conserva en bloques `modelBuilder.Entity<...>` dentro del contexto: Equipo 1:N Heroe con FK opcional, Heroe 1:1 Ficha y Heroe N:M Superpoder.
 
 ## Paso 1. DER
 
